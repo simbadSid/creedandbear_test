@@ -10,13 +10,12 @@
 class OrdersManager_0_base : public OrdersManager
 {
 public:
-    OrdersManager_0_base(unsigned int quantity) : OrdersManager(quantity){};
     ~OrdersManager_0_base();
 
 protected:
     void custom_fake_save_on_db(int order_id, unsigned int order_number);
 
-private:
+    void startOrderManager();
     void stopAndCleanOrderManager();
 
 };

@@ -37,7 +37,7 @@ set(						DIR_TEST							${CMAKE_SOURCE_DIR}/test)
 set(						DIR_CODE							${CMAKE_SOURCE_DIR}/code)
 set(						DIR_RESOURCE						${CMAKE_SOURCE_DIR}/resource)
 
-set(						EXEC_LIST        					testOrdersManager_0_base)
+set(						EXEC_LIST        					testOrdersManager)
 
 #set(						LIB_LIST_TEST_UNIT_TEST				${LIB_TOOLS_CC} ${LIB_CUSTOM_ALLOCATOR} ${LIB_HTTP_SERVER} ${LIB_JOURNAL} ${LIB_HTTP_SERVER_CORE})
 
@@ -53,7 +53,7 @@ set(						CMAKE_CXX_STANDARD_REQUIRED			ON)
 set(						CMAKE_CXX_EXTENSIONS				OFF)
 
 set(						DEBUG								ON)
-set(						CMAKE_CXX_FLAGS						"-lstdc++ -g -DLOG ") # "-Wall -g -Werror -o3 -pthread") #-Wextra")
+set(						CMAKE_CXX_FLAGS						"-lstdc++ -g") # "-DLOG -Wall -g -Werror -o3 -pthread") #-Wextra")
 
 #TODO set the custom allocator
 
@@ -114,16 +114,18 @@ SET(libCustomList "")
     ENDIF()
 
 
-
 #=======================================================
-# Compile custom applications
+# Compile custom applications (no debug log)
 #=======================================================
 foreach(exec ${EXEC_LIST})
     SET (execPath ${DIR_CODE}/${DIR_SRC}/${exec})
-    message(STATUS				"\n\nGenerate exec ${exec}")    					        # Compile the main executables
+    message(STATUS				"\n\nGenerate exec ${exec} without logs")    		           # Compile the main executables
     add_executable(				${exec} ${libCustomList} ${execPath})
     #target_link_libraries(		${EXEC_HTTP_SERVER}	PUBLIC ${LIB_LIST_EXEC_HTTP_SERVER} )
 endforeach(exec ${EXEC_LIST})
+
+
+
 
 
 

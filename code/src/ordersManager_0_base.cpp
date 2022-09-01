@@ -15,6 +15,11 @@ void OrdersManager_0_base::custom_fake_save_on_db(int order_id, unsigned int ord
     this->fake_save_on_db(order_id, order_number);
 }
 
+void OrdersManager_0_base::startOrderManager()
+{
+
+}
+
 void OrdersManager_0_base::stopAndCleanOrderManager()
 {
 

@@ -25,18 +25,26 @@ private:
 
 
 public:
-    OrdersManager(unsigned int quantity);
+    OrdersManager();
+    virtual ~OrdersManager() = default;
 
-    void generate_fake_orders();
+    void generate_fake_orders(unsigned int quantity);
     void log(const char *format, ...);
     void fake_save_on_db(int order_id, unsigned int order_number);
     void process_orders();
 
-    static void runOrdersManager(OrdersManager *om);
+    /**
+     * @def Main function: run the simulation by processing all the created orders
+     * @param om OrdersManager on which to run the simulation
+     * @return the execution time of the simulation (in milliseconds)
+     */
+    static long runOrdersManager(OrdersManager *om, unsigned int quantity);
 
 
 protected:
     virtual void custom_fake_save_on_db(int order_id, unsigned int order_number) = 0;
+    virtual void startOrderManager() = 0;
+    virtual void stopAndCleanOrderManager() = 0;
 };
 
 

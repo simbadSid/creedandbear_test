@@ -4,23 +4,26 @@
 
 #include "ordersManager.h"
 
+std::random_device rd; // obtain a random number from hardware
+std::mt19937 gen(rd()); // seed the generator
+std::uniform_int_distribution<> distr_0_1000(0, 1000);
 
-OrdersManager::OrdersManager(unsigned int quantity)
+
+OrdersManager::OrdersManager()
 {
+    // Use a seed for the random generator
+    std::srand(42);
+}
+
+void OrdersManager::generate_fake_orders(unsigned int quantity)
+{
+    this->log("Generating fake orders: %u\n", this->quantity);
+
+    this->startOrderManager();
     this->orders = std::vector<std::pair<int, unsigned int> >(quantity);
     this->orders_processed = 0;
     this->last_printed_log = std::chrono::system_clock::now();
     this->quantity = quantity;
-
-    // Use a seed for the random generator
-    std::srand(42);
-
-    this->generate_fake_orders();
-}
-
-void OrdersManager::generate_fake_orders()
-{
-    this->log("Generating fake orders: %u\n", this->quantity);
 
     for (unsigned int i=0; i<this->quantity; ++i)
     {
@@ -49,18 +52,13 @@ void OrdersManager::fake_save_on_db(int order_id, unsigned int order_number)
 {
     this->log("Order [%d] %u was successfully prosecuted.\n", order_id, order_number);
 
-    std::random_device rd; // obtain a random number from hardware
-    std::mt19937 gen(rd()); // seed the generator
-    std::uniform_int_distribution<> distr(0, 1000);
 
-    auto time = distr(gen);
+    auto time = distr_0_1000(gen);
     std::this_thread::sleep_for(std::chrono::milliseconds(time));
 }
 
 void OrdersManager::process_orders()
 {
-
-//TODO pb in loop
     for(const auto& order: this->orders)
     {
         this->custom_fake_save_on_db(order.first, order.second);
@@ -70,18 +68,23 @@ void OrdersManager::process_orders()
         if (currentTime > this->last_printed_log)
         {
             this->last_printed_log = currentTime + std::chrono::seconds(5);
-            log("Total orders executed: %d\n", this->orders_processed/this->quantity);
+            log("Total orders executed: %u / %u\n", this->orders_processed, this->quantity);
         }
     }
 }
 
 
-void OrdersManager::runOrdersManager(OrdersManager *om)
+long OrdersManager::runOrdersManager(OrdersManager *om, unsigned int quantity)
 {
+    om->generate_fake_orders(quantity);
+
     auto startTime = std::chrono::system_clock::now();
     om->process_orders();
-    auto delay = std::chrono::system_clock::now() - startTime;
+    auto endTime = std::chrono::system_clock::now();
 
-//TODO print delay
-    om->log("Execution time: ");
+    auto delay = std::chrono::duration_cast<std::chrono::milliseconds>(endTime-startTime).count();
+
+    om->log("Execution time: %l\n", delay);
+
+    return delay;
 }
