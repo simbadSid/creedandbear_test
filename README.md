@@ -31,7 +31,7 @@ We also use __N__ as the number of orders to store.
 * __1_bufferedDb__:
 
 
-An experimental evaluation of the proposed algorithm is plotted in XXXXXXX ![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+An experimental evaluation of the proposed algorithm is plotted in XXXXXXX ![alt text](https://github.com/simbadSid/creedandbear_test/resource/benchmark.png?raw=true)
 
 
 ## Experimental benchmark
