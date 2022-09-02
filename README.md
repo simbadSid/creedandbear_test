@@ -40,8 +40,7 @@ However, this is a theoretical complexity. In fact, the execution time is not di
 
 ## Experimental benchmark
 Inorder to compare the different proposed algorithm, we have implemented an experimental benchmarking (code [link](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/testOrdersManager.cpp)).
-The result of this benchmark are presented in the following graphs.
-![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark.png)
+The result of this benchmark are presented in the following graph.
 ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark_log.png)
 
 This benchmark evaluates each algorithm using different number of orders.
