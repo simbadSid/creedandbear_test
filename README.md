@@ -19,7 +19,7 @@ Hence, the will reduce the number of access to the critical section (locked sect
 * __5_perThreadList_BufferedList_BufferedDb__: in addition to the previous algorithm, this version implements a shared list for each consumer thread.
 By storing the data within the thread that consumes them, this final optimization minimize drastically the number of accesses to the critical section.
 The architecture of this algorithm is presented in the following graph.
-![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithm_5_architecture.png)
+![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithm_5_architecture.drawio.png)
 
 In the __Conclusion__ section, we present and explain our choice of algorithm for solving the considered problem.
 
