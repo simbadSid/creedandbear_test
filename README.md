@@ -24,21 +24,24 @@ In the __Conclusion__ section, we present and explain our choice of algorithm fo
 ## Algorithmic complexity
 In this section, we will present the algorithmic complexity of the different algorithms in terms of time to access the database.
 We also use __N__ as the number of orders to store.
-The algorithmic complexity of our algorithms is presented in ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithmicComplexity.drawio.png).
+The algorithmic complexity of our algorithms is presented in the following figure. ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithmicComplexity.drawio.png)
 
-* __Base__: This algorithm accesses sequentially to the database. Thus, its complexity is:
-    ```
-    O(N)
-    ```
-* __1_bufferedDb__:
+* __0_Base__: This algorithm accesses sequentially to the database. Thus, its complexity is purely linear.
+* __1_bufferedDb__: By reducing the number of accesses to the database (by a factor 1/Buffer Size), we reduce the complexity by the same factor.
+* __2_sharedList__: Given that the accesses to the database are processed in parallel, we divide the complexity by the number of threads.
+However, this is a theoretical complexity. In fact, the execution time is not divide by the number of threads. This is mainly due to the synchronization between threads.
+* __3_sharedList_BufferedList__: this complexity is the same as the previous one. Indeed, the only thread that is optimized is the main thread which was already the fastest one.
+* __4_sharedList_BufferedList_BufferedDb__: By buffering the accesses to the database, we divide the complexity of each consumer thread by the size of a buffer.
+* __5_perThreadList_BufferedList_BufferedDb__: The complexity of this algorithm is the same as the previous one. However, this algorithm reduces the contention between the producer thread and the consumer threads. It also remove any synchroniation between the consumer threads.
 
-
-An experimental evaluation of the proposed algorithm is plotted in XXXXXXX ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark.png)
+An experimental evaluation of the proposed algorithm is plotted in XXXXXXX
 
 
 ## Experimental benchmark
-Inorder to compare the different proposed algorithm, we have implemented an experimental benchmarking (code XXXXXX).
-The result of this benchmark are presented in XXXX.
+Inorder to compare the different proposed algorithm, we have implemented an experimental benchmarking (code [link](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/testOrdersManager.cpp)).
+The result of this benchmark are presented in the following graphs.
+![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark.png)
+![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark_log.png)
 This experimentation compares each algorithm using different number of orders.
 
 It is noteworthy that our experimentation uses the following assumptions:
@@ -70,6 +73,7 @@ This project uses the CMake framework.
 
 In order to build the project, we need to run the following command
 ```
+mkdir bin
 cd bin
 cmake ../
 make;
