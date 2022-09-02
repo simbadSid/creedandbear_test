@@ -24,6 +24,8 @@ In the __Conclusion__ section, we present and explain our choice of algorithm fo
 ## Algorithmic complexity
 In this section, we will present the algorithmic complexity of the different algorithms in terms of time to access the database.
 We also use __N__ as the number of orders to store.
+The algorithmic complexity of our algorithms is presented in ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithmicComplexity.drawio.png).
+
 * __Base__: This algorithm accesses sequentially to the database. Thus, its complexity is:
     ```
     O(N)
