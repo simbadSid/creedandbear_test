@@ -14,6 +14,10 @@
 
 
 
+#define NB_THREAD           5
+#define BUFFER_SIZE_DB      5
+#define BUFFER_SIZE_LIST    50
+#define DB_ACCESS_TIME      10 // Maximum time (n Milliseconds) to access a DB
 
 
 class OrdersManager {
@@ -31,7 +35,8 @@ public:
     void generate_fake_orders(unsigned int quantity);
     void log(const char *format, ...);
     void fake_save_on_db(int order_id, unsigned int order_number);
-    void process_orders();
+    void fake_save_on_db(const std::vector<std::pair<int, unsigned int> >& orderList, unsigned int size);
+    void fake_save_on_db(const std::pair<int, unsigned int> orderList[], unsigned int size);
 
     /**
      * @def Main function: run the simulation by processing all the created orders
@@ -43,8 +48,9 @@ public:
 
 protected:
     virtual void custom_fake_save_on_db(int order_id, unsigned int order_number) = 0;
-    virtual void startOrderManager() = 0;
-    virtual void stopAndCleanOrderManager() = 0;
+    void process_orders();
+    virtual void startOrderManager();
+    virtual void waitAndCleanOrderManager();
 };
 
 

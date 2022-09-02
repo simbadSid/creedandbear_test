@@ -53,7 +53,7 @@ set(						CMAKE_CXX_STANDARD_REQUIRED			ON)
 set(						CMAKE_CXX_EXTENSIONS				OFF)
 
 set(						DEBUG								ON)
-set(						CMAKE_CXX_FLAGS						"-lstdc++ -g") # "-DLOG -Wall -g -Werror -o3 -pthread") #-Wextra")
+set(						CMAKE_CXX_FLAGS						"-lstdc++ -g -o3 ") # "  -DLOG -Wall -g -Werror -o3 -pthread") #-Wextra")
 
 #TODO set the custom allocator
 
