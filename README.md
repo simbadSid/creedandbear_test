@@ -1,27 +1,27 @@
 # creedandbear_test
 
 ## Proposed algorithms
-This repository contains my XXXXXXXX.
 
-In this context, we have designed and implemented 5 different algorithms to optimize the pattern followed to store the considered data. 
-This algorithms (sorted from the less to the most complex/efficients) are:
-* __0_Base__: the base algorithm proposed in the assignment.
-* __1_bufferedDb__: in this algorithm the database is not accessed at each iteration.
+In this project, we have designed and implemented 5 different algorithms to optimize the pattern followed to store the considered data.
+In the __Conclusion__ section, we present and explain our choice of algorithm for solving the considered problem.
+
+The proposed algorithms (sorted from the less to the most complex/efficients) are:
+* [0_Base](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_0_base.cpp): the base algorithm proposed in the assignment.
+* [1_bufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_1_bufferedDb.cpp): in this algorithm the database is not accessed at each iteration.
 Instead, the orders are stored within a local buffer and the database is only requested once the buffer is full.
-* __2_sharedList__: this algorithm follows the model of the "single producer and multiple consumers".
+* [2_sharedList](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_2_sharedList.cpp): this algorithm follows the model of the "single producer and multiple consumers".
 A unique thread is responsible for processing of all the orders and storing them within a shared list.
 Different consumer threads are then responsible for parsing these orders and requesting the database. 
 Storing an order is then assynchrounous.
-* __3_sharedList_BufferedList__: this algorithm uses the same architecture as the SimpleSharedList.
+* [3_sharedList_BufferedList](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_3_sharedList_BufferedList.cpp): this algorithm uses the same architecture as the SimpleSharedList.
 In addition, the producer thread reduces its latency by not accessing the shared list at each iteration (buffers the orders until the buffer is full).
 Hence, the will reduce the number of access to the critical section (locked section).
-* __4_sharedList_BufferedList_BufferedDb__: in addition to the previous algorithm, this algorithm buffers the accesses to the daa base.
-* __5_perThreadList_BufferedList_BufferedDb__: in addition to the previous algorithm, this version implements a shared list for each consumer thread.
+* [4_sharedList_BufferedList_BufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_4_sharedList_BufferedList_BufferedDb.cpp): in addition to the previous algorithm, this algorithm buffers the accesses to the daa base.
+* [5_perThreadList_BufferedList_BufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_5_perThreadList_BufferedList_BufferedDb.cpp): in addition to the previous algorithm, this version implements a shared list for each consumer thread.
 By storing the data within the thread that consumes them, this final optimization minimize drastically the number of accesses to the critical section.
 The architecture of this algorithm is presented in the following graph.
 ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithm_5_architecture.drawio.png)
 
-In the __Conclusion__ section, we present and explain our choice of algorithm for solving the considered problem.
 
 
 ## Algorithmic complexity
@@ -37,15 +37,14 @@ However, this is a theoretical complexity. In fact, the execution time is not di
 * __4_sharedList_BufferedList_BufferedDb__: By buffering the accesses to the database, we divide the complexity of each consumer thread by the size of a buffer.
 * __5_perThreadList_BufferedList_BufferedDb__: The complexity of this algorithm is the same as the previous one. However, this algorithm reduces the contention between the producer thread and the consumer threads. It also remove any synchroniation between the consumer threads.
 
-An experimental evaluation of the proposed algorithm is plotted in XXXXXXX
-
 
 ## Experimental benchmark
 Inorder to compare the different proposed algorithm, we have implemented an experimental benchmarking (code [link](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/testOrdersManager.cpp)).
 The result of this benchmark are presented in the following graphs.
 ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark.png)
 ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark_log.png)
-This experimentation compares each algorithm using different number of orders.
+
+This benchmark evaluates each algorithm using different number of orders.
 
 It is noteworthy that our experimentation uses the following assumptions:
 * For the sake of simplicity, the maximum latency to store an order within the database has been reduced to 10ms (instead of 1000ms in the original implementation).
