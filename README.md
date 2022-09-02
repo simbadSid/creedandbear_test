@@ -6,17 +6,20 @@ This repository contains my XXXXXXXX.
 In this context, we have designed and implemented 5 different algorithms to optimize the pattern followed to store the considered data. 
 This algorithms (sorted from the less to the most complex/efficients) are:
 * __0_Base__: the base algorithm proposed in the assignment.
-* __1_bufferedDb__: the database is not accessed at each iteration.
+* __1_bufferedDb__: in this algorithm the database is not accessed at each iteration.
 Instead, the orders are stored within a local buffer and the database is only requested once the buffer is full.
-* __2_sharedList__: this algorithm follows the model of the __single producer and multiple consumers__.
-A unique thread is responsible for processing the orders and storing them within a shared list.
+* __2_sharedList__: this algorithm follows the model of the "single producer and multiple consumers".
+A unique thread is responsible for processing of all the orders and storing them within a shared list.
 Different consumer threads are then responsible for parsing these orders and requesting the database. 
+Storing an order is then assynchrounous.
 * __3_sharedList_BufferedList__: this algorithm uses the same architecture as the SimpleSharedList.
-In addition, the producer thread reduces its latency by not accessing the shared list at each iteration.
-Hence, it will reduce its access to the critical section (locked section).
-
-* __4_sharedList_BufferedList_BufferedDb__: XXXXXXX
-* __5_perThreadList_BufferedList_BufferedDb__: XXXXXXX
+In addition, the producer thread reduces its latency by not accessing the shared list at each iteration (buffers the orders until the buffer is full).
+Hence, the will reduce the number of access to the critical section (locked section).
+* __4_sharedList_BufferedList_BufferedDb__: in addition to the previous algorithm, this algorithm buffers the accesses to the daa base.
+* __5_perThreadList_BufferedList_BufferedDb__: in addition to the previous algorithm, this version implements a shared list for each consumer thread.
+By storing the data within the thread that consumes them, this final optimization minimize drastically the number of accesses to the critical section.
+The architecture of this algorithm is presented in the following graph.
+![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithm_5_architecture.png)
 
 In the __Conclusion__ section, we present and explain our choice of algorithm for solving the considered problem.
 
