@@ -30,7 +30,7 @@ int main()
             std::pair<OrdersManager*, std::string> (new OrdersManager_1_bufferedDb(),                             "OrdersManager_1_bufferedDb"),
             std::pair<OrdersManager*, std::string> (new OrdersManager_2_sharedList(),                             "OrdersManager_2_sharedList"),
             std::pair<OrdersManager*, std::string> (new OrdersManager_3_sharedList_BufferedList(),                "OrdersManager_3_sharedList_BufferedList"),
-            std::pair<OrdersManager*, std::string> (new OrdersManager_4_sharedList_BufferedList_BufferedDb(),     "OrdersManager_4_sharedList_BufferedList_BufferedDb")
+            std::pair<OrdersManager*, std::string> (new OrdersManager_4_sharedList_BufferedList_BufferedDb(),     "OrdersManager_4_sharedList_BufferedList_BufferedDb"),
             std::pair<OrdersManager*, std::string> (new OrdersManager_5_perThreadList_BufferedList_BufferedDb(),"OrdersManager_5_perThreadList_BufferedList_BufferedDb")
     };
 
