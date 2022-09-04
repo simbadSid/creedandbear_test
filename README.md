@@ -39,7 +39,7 @@ However, this is a theoretical complexity. In fact, the execution time is not di
 
 
 ## Experimental benchmark
-Inorder to compare the different proposed algorithm, we have implemented an experimental benchmarking (code [link](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/testOrdersManager.cpp)).
+Inorder to compare the different proposed algorithm, we have implemented an experimental benchmarking (code [link](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/main_ordersManager.cpp)).
 The result of this benchmark are presented in the following graph.
 ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/benchmark_log.png)
 
@@ -69,7 +69,7 @@ It is noteworthy that our choice is only valid for a relatively large number of 
 Otherwise, the time spent to create the different threads and to split the data becomes higher than the gain brought by our optimization.
 In the case of a small number of orders, we would rather choose __1_bufferedDb__ which simply reduces the number of access to the database.
 
-## Build
+## Build and test
 This project uses the CMake framework.
 
 In order to build the project, we need to run the following command
@@ -80,5 +80,7 @@ cmake ../
 make;
 ```
 
-Building the project results in generating the __bin/testOrdersManager__ executable file.
-This file benchmarks the different implemented algorithm using different quantity of orders.
+Building the project results in generating the following executable file:
+* __bin/main_ordersManager__: benchmarks the different implemented algorithm using different quantity of orders.
+This executable only prints the execution time.
+* __bin/main_ordersManager_verbose__: 

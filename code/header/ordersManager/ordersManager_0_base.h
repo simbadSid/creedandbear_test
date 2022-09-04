@@ -10,7 +10,7 @@
 class OrdersManager_0_base : public OrdersManager
 {
 protected:
-    void custom_fake_save_on_db(int order_id, unsigned int order_number);
+    void custom_fake_save_on_db(Order order);
 
 };
 #endif //CREEDANDBEAR_TEST_ORDERSMANAGER_0_BASE_H

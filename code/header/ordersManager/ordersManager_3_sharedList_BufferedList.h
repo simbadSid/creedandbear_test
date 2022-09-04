@@ -2,23 +2,23 @@
 // Created by Riyane on 31/08/2022.
 //
 
-#ifndef CREEDANDBEAR_TEST_ORDERSMANAGER_4_SHARED_LIST_BUFFERED_LIST_BUFFERED_DB_H
-#define CREEDANDBEAR_TEST_ORDERSMANAGER_4_SHARED_LIST_BUFFERED_LIST_BUFFERED_DB_H
+#ifndef CREEDANDBEAR_TEST_ORDERSMANAGER_3_SHARED_LIST_BUFFERED_LIST_H
+#define CREEDANDBEAR_TEST_ORDERSMANAGER_3_SHARED_LIST_BUFFERED_LIST_H
 
 #include <thread>
 #include <list>
 #include "ordersManager.h"
 
-class OrdersManager_4_sharedList_BufferedList_BufferedDb : public OrdersManager
+class OrdersManager_3_sharedList_BufferedList : public OrdersManager
 {
 private:
-    std::pair<int, unsigned int> buffer[BUFFER_SIZE_LIST];
+    Order bufferSharedList[BUFFER_SIZE_LIST];
     unsigned int currentBufferSize;
 
     std::mutex mtx;
     std::condition_variable condSharedAccess;
     std::thread threadVector[NB_THREAD];
-    std::list<std::pair<int, unsigned int> > *sharedList;
+    std::list<Order> *sharedList;
     // The atomic is not necessary in this context
     // It is used to close the warning about data set but not used
     std::atomic<bool> run;
@@ -32,10 +32,10 @@ protected:
      * @param order_id
      * @param order_number
      */
-    void custom_fake_save_on_db(int order_id, unsigned int order_number);
+    void custom_fake_save_on_db(Order order);
     void orderConsumer();
     void startOrderManager();
     void waitAndCleanOrderManager();
 
 };
-#endif //CREEDANDBEAR_TEST_ORDERSMANAGER_4_SHARED_LIST_BUFFERED_LIST_BUFFERED_DB_H
+#endif //CREEDANDBEAR_TEST_ORDERSMANAGER_3_SHARED_LIST_BUFFERED_LIST_H

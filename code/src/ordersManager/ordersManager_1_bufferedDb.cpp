@@ -6,9 +6,9 @@
 
 
 
-void OrdersManager_1_bufferedDb::custom_fake_save_on_db(int order_id, unsigned int order_number)
+void OrdersManager_1_bufferedDb::custom_fake_save_on_db(Order order)
 {
-    this->bufferDB[this->currentBufferSize] = std::pair<int, unsigned int>(order_id, order_number);
+    this->bufferDB[this->currentBufferSize] = order;
     ++ this->currentBufferSize;
 
     if (this->currentBufferSize == BUFFER_SIZE_DB)

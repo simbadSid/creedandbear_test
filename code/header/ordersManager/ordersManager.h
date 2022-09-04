@@ -10,6 +10,9 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include <list>
+
+#include "order.h"
 
 
 
@@ -20,9 +23,11 @@
 #define DB_ACCESS_TIME      10 // Maximum time (n Milliseconds) to access a DB
 
 
-class OrdersManager {
+
+class OrdersManager
+{
 private:
-    std::vector<std::pair<int, unsigned int> > orders;
+    std::vector<Order> orders;
     unsigned int orders_processed;
     std::chrono::system_clock::time_point last_printed_log;
     unsigned int quantity;
@@ -33,10 +38,8 @@ public:
     virtual ~OrdersManager() = default;
 
     void generate_fake_orders(unsigned int quantity);
-    void log(const char *format, ...);
-    void fake_save_on_db(int order_id, unsigned int order_number);
-    void fake_save_on_db(const std::vector<std::pair<int, unsigned int> >& orderList, unsigned int size);
-    void fake_save_on_db(const std::pair<int, unsigned int> orderList[], unsigned int size);
+    void fake_save_on_db(Order order);
+    void fake_save_on_db(const Order orderList[], unsigned int size);
 
     /**
      * @def Main function: run the simulation by processing all the created orders
@@ -47,11 +50,30 @@ public:
 
 
 protected:
-    virtual void custom_fake_save_on_db(int order_id, unsigned int order_number) = 0;
+    virtual void custom_fake_save_on_db(Order order) = 0;
     void process_orders();
     virtual void startOrderManager();
     virtual void waitAndCleanOrderManager();
+
+
+//#define TEST
+#ifdef TEST
+private:
+    std::mutex mtx; // Mutex used to store orders for unit tests
+    std::vector<Order> ordersinDB;
+    unsigned int ordersinDBIndex;
+
+public:
+    bool isCorrectOrdersProcessing();
+#endif
+
 };
+
+#ifdef LOG
+void log(const char *format, ...);
+#else
+#define log(...) ((void)0)
+#endif
 
 
 

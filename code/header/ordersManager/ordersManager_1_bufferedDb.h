@@ -10,11 +10,11 @@
 class OrdersManager_1_bufferedDb : public OrdersManager
 {
 private:
-    std::pair<int, unsigned int> bufferDB[BUFFER_SIZE_DB];
+    Order bufferDB[BUFFER_SIZE_DB];
     unsigned int currentBufferSize;
 
 protected:
-    void custom_fake_save_on_db(int order_id, unsigned int order_number);
+    void custom_fake_save_on_db(Order order);
 
     void startOrderManager();
     void waitAndCleanOrderManager();

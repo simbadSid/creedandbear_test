@@ -13,9 +13,9 @@
 
 
 
-void OrdersManager_5_perThreadList_BufferedList_BufferedDb::custom_fake_save_on_db(int order_id, unsigned int order_number)
+void OrdersManager_5_perThreadList_BufferedList_BufferedDb::custom_fake_save_on_db(Order order)
 {
-    this->buffer[this->currentBufferSize] = std::pair<int, unsigned int>(order_id, order_number);
+    this->buffer[this->currentBufferSize] = order;
     ++ this->currentBufferSize;
 
     if (this->currentBufferSize == BUFFER_SIZE_DB)
@@ -34,7 +34,7 @@ void OrdersManager_5_perThreadList_BufferedList_BufferedDb::custom_fake_save_on_
 void OrdersManager_5_perThreadList_BufferedList_BufferedDb::orderConsumer(unsigned int threadIndex)
 {
     ThreadAttribute *threadAttribute = this->threadAttributeList + threadIndex;
-    std::pair<int, unsigned int> *orderArray;
+    Order *orderArray;
     unsigned int nbElem;
 
     while (threadAttribute->run)
@@ -50,7 +50,7 @@ void OrdersManager_5_perThreadList_BufferedList_BufferedDb::orderConsumer(unsign
             }
             if (!threadAttribute->run)
             {
-                this->log("Got request to shut down thread %d (%d)\n", std::this_thread::get_id(), threadIndex);
+                log("Got request to shut down thread %d (%d)\n", std::this_thread::get_id(), threadIndex);
                 threadAttribute->condSharedAccess.notify_all();
                 break;
             }
@@ -59,8 +59,8 @@ void OrdersManager_5_perThreadList_BufferedList_BufferedDb::orderConsumer(unsign
 
             // Retrieve all the orders to process (N * buffer size)
             nbElem = threadAttribute->sharedList->size();
-            orderArray = new std::pair<int, unsigned int>[nbElem];
-            for (int i=0; i<nbElem; ++i)
+            orderArray = new Order[nbElem];
+            for (unsigned int i=0; i<nbElem; ++i)
             {
                 orderArray[i] = threadAttribute->sharedList->back();
                 threadAttribute->sharedList->pop_back();
@@ -70,6 +70,7 @@ void OrdersManager_5_perThreadList_BufferedList_BufferedDb::orderConsumer(unsign
             threadAttribute->condSharedAccess.notify_all();
         }
         this->fake_save_on_db(orderArray, nbElem);
+        delete orderArray;
     }
 }
 
@@ -81,12 +82,12 @@ void OrdersManager_5_perThreadList_BufferedList_BufferedDb::startOrderManager()
     for (unsigned int i=0; i<NB_THREAD; i++)
     {
         // Init the buffer and shared list of the thread
-        this->threadAttributeList[i].sharedList = new std::list<std::pair<int, unsigned int> >(0);
+        this->threadAttributeList[i].sharedList = new std::list<Order>(0);
 
         // Init the consumer thread
         this->threadAttributeList[i].run = true;
         this->threadAttributeList[i].thread = std::thread(&OrdersManager_5_perThreadList_BufferedList_BufferedDb::orderConsumer, this, i);
-        this->log("Init thread %d (%d)\n", this->threadAttributeList[i].thread.get_id(), i);
+        log("Init thread %d (%d)\n", this->threadAttributeList[i].thread.get_id(), i);
     }
 
     this->process_orders();
@@ -94,7 +95,6 @@ void OrdersManager_5_perThreadList_BufferedList_BufferedDb::startOrderManager()
 
 void OrdersManager_5_perThreadList_BufferedList_BufferedDb::waitAndCleanOrderManager()
 {
-
     // For each trade
     ThreadAttribute *threadAttribute = this->threadAttributeList;
     for (unsigned i=0; i<NB_THREAD; ++i)
@@ -113,9 +113,8 @@ void OrdersManager_5_perThreadList_BufferedList_BufferedDb::waitAndCleanOrderMan
 
         // Join the thread
         threadAttribute->condSharedAccess.notify_all();
-        auto threadId = threadAttribute->thread.get_id();
         threadAttribute->thread.join();
-        this->log("End thread %d (%d)\n", threadId, i);
+        log("End thread %d (%d)\n", threadAttribute->thread.get_id(), i);
         delete threadAttribute->sharedList;
 
         ++threadAttribute;

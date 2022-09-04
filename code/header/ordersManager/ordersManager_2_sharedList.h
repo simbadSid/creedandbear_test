@@ -15,7 +15,7 @@ private:
     std::mutex mtx;
     std::condition_variable condSharedAccess;
     std::thread threadVector[NB_THREAD];
-    std::list<std::pair<int, unsigned int> > *sharedList;
+    std::list<Order> *sharedList;
     // The atomic is not necessary in this context
     // It is used to close the warning about data set but not used
     std::atomic<bool> run;
@@ -27,7 +27,7 @@ protected:
      * @param order_id
      * @param order_number
      */
-    void custom_fake_save_on_db(int order_id, unsigned int order_number);
+    void custom_fake_save_on_db(Order order);
     void orderConsumer();
     void startOrderManager();
     void waitAndCleanOrderManager();
