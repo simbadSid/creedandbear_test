@@ -122,11 +122,6 @@ long OrdersManager::runOrdersManager(OrdersManager *om, unsigned int quantity)
 
     log("Execution time: %ld\n", delay);
 
-#ifdef TEST
-    if (!om->isCorrectOrdersProcessing())
-        throw std::invalid_argument("Wrong result of runOrderManager");
-#endif
-
     return delay;
 }
 

@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 3.23)
 #	cd bin
 #	cmake ../
 #	make
-#	ctest -j<#parallel cores>
+#	ctest
 
 
 ###############################################
@@ -30,7 +30,9 @@ set(						CMAKE_CXX_EXTENSIONS				OFF)
 enable_testing()
 
 set(						DIR_SRC                             src)
+set(						DIR_APP                             app)
 set(						DIR_HEADER                          header)
+set(						DIR_TEST                            test)
 
 set(						EXTENSION_SRC						.cpp)
 set(						EXTENSION_HEADER					.h)
@@ -41,10 +43,10 @@ set(						DIR_CODE							${CMAKE_SOURCE_DIR}/code)
 set(						DIR_RESOURCE						${CMAKE_SOURCE_DIR}/resource)
 
 set(						EXEC_LIST        					main_ordersManager)
+set(						SRC_TEST_MAIN						test_main${EXTENSION_SRC})
 
 #set(						LIB_LIST_TEST_UNIT_TEST				${LIB_TOOLS_CC} ${LIB_CUSTOM_ALLOCATOR} ${LIB_HTTP_SERVER} ${LIB_JOURNAL} ${LIB_HTTP_SERVER_CORE})
 
-#set(						SRC_TEST_MAIN						test_main${EXTENSION_SRC})
 
 
 set(						CMAKE_CXX_FLAGS						"-O3 -Wall -Werror -Wextra -g")
@@ -66,7 +68,7 @@ message(STATUS "Flags                 : " ${CMAKE_CXX_FLAGS})
 
 
 #=======================================================
-# List the header sub directories relative to lib
+# Include the headers of the project
 #=======================================================
 MACRO(HEADER_DIR_LIST lib)
     message(STATUS "\tAdd sub directory header: " ${lib})
@@ -81,56 +83,74 @@ MACRO(HEADER_DIR_LIST lib)
     ENDFOREACH()
 ENDMACRO()
 
+HEADER_DIR_LIST(${DIR_CODE}/${DIR_HEADER})
+
 
 #=======================================================
 # Compile custom code
 #=======================================================
-FILE(GLOB libList RELATIVE ${DIR_CODE} ${DIR_CODE}/*)						# List the custom libraries to compile
 SET(libCustomList "")
-message(STATUS "\n\nCompile library: " ${lib})
-HEADER_DIR_LIST(${DIR_CODE}/${DIR_HEADER})									#		Set the headers into the project
 
-file(GLOB_RECURSE sourceFileList ${DIR_CODE}/${DIR_SRC}/*${EXTENSION_SRC})	#		Gather the source files: The file(GLOB...) allows for wildcard additions
+message(STATUS "\n\nCompile custom libraries: ")
+file(GLOB_RECURSE libFileList ${DIR_CODE}/${DIR_SRC}/*${EXTENSION_SRC})     # Gather the source files of the custom libraries
 message(STATUS "\tAdd source files")
-foreach(sourceFile ${sourceFileList})
+foreach(sourceFile ${libFileList})
     message(STATUS "\t\t${sourceFile}")
     LIST(APPEND libCustomList ${sourceFile})
-endforeach(sourceFile ${sourceFileList})
+endforeach(sourceFile ${libFileList})
 
-IF (sourceFileList)
-#    add_library(AAAAA SHARED ${sourceFileList})					#		Generate the shared library from the sources
-    #target_link_libraries(${lib} ${sourceFileList})
-    #install(TARGETS LIB_CUSTOM DESTINATION /usr/lib)					#		Set the location for library installation -- i.e., /usr/lib in this case not really necessary in this example. Use "sudo make install" to apply
-ENDIF()
+#message(STATUS "\n\nCompile the application(s):")
+#file(GLOB_RECURSE appFileList ${DIR_APP}/*${EXTENSION_SRC})                 # Gather the source files of the application
+#foreach(sourceFile ${appFileList})
+#    message(STATUS "\t\t${sourceFile}")
+#    LIST(APPEND libCustomList ${sourceFile})
+#endforeach(sourceFile ${appFileList})
+
+
+message(STATUS "\n\nCompile tests:")
+file(GLOB_RECURSE testFileList ${DIR_TEST}/*${EXTENSION_SRC})               # Gather the test source files
+SET(testList "")
+foreach(sourceFile ${testFileList})
+    message(STATUS "\t\t${sourceFile}")
+    LIST(APPEND testList ${sourceFile})
+endforeach(sourceFile ${testFileList})
 
 
 #=======================================================
-# Compile custom applications (no debug log)
+# Compile custom applications
 #=======================================================
+message(STATUS "\n\nGenerate app executables:")
 foreach(exec ${EXEC_LIST})
 
     SET(execName ${exec})
-    message(STATUS "\n\nGenerate production executable \"${execName}\" (no logs, no routines for tests)")
-    SET (execPath ${DIR_CODE}/${DIR_SRC}/${exec})
-    add_executable(${execName} ${libCustomList} ${execPath})
+    message(STATUS "\t\t\"${execName}\" (no logs, no routines for tests)")
+    SET (execSourceFile ${DIR_APP}/${exec}${EXTENSION_SRC})
+    add_executable(${execName} ${libCustomList} ${execSourceFile})
     target_compile_options( ${execName} PUBLIC ${FLAG_PROD})
 
     SET(execName ${exec}_verbose)
-    message(STATUS "\n\nGenerate verbose executable \"${execName}\" (print the logs of the code)")
-    SET (execPath ${DIR_CODE}/${DIR_SRC}/${exec})
-    add_executable(${execName} ${libCustomList} ${execPath})
+    message(STATUS "\t\t\"${execName}\" (no logs, no routines for tests)")
+    SET (execSourceFile ${DIR_APP}/${exec}${EXTENSION_SRC})
+    add_executable(${execName} ${libCustomList} ${execSourceFile})
     target_compile_options( ${execName} PUBLIC ${FLAG_VERBOSE})
-
-    SET(execName ${exec}_test)
-    message(STATUS "\n\nGenerate test executable \"${execName}\" (execute the routines for tests)")
-    SET (execPath ${DIR_CODE}/${DIR_SRC}/${exec})
-    add_executable(${execName} ${libCustomList} ${execPath})
-    target_compile_options( ${execName} PUBLIC ${FLAG_TEST})
 
 endforeach(exec ${EXEC_LIST})
 
 
+#=======================================================
+# Compile custom tests
+#=======================================================
+include(CTest)                                                              # Part of CMake, no extra frameworks / lib
+enable_testing()
 
 
+message(STATUS "\n\nGenerate CTest executables:")
+foreach(execTest ${testList})
+    message(STATUS "\t\t\"${execTest}\"")
+    get_filename_component(testName ${execTest} NAME_WE)
+    add_executable(${testName} ${libCustomList} ${execTest})
+    target_compile_options( ${testName} PUBLIC ${FLAG_TEST})
+   add_test(NAME ${testName} COMMAND ${testName})
+endforeach(execTest ${testList})
 
 
