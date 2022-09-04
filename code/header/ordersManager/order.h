@@ -5,19 +5,29 @@
 #ifndef TEST_ORDER_H
 #define TEST_ORDER_H
 
+#include <iostream>
+
 class Order
 {
 public:
     int id;
     unsigned int number;
 
-    Order();
+    Order() = default;
     Order(int id, unsigned int number);
-//    Order(Order const &o);
-bool operator == (Order o)
-{
-    return ((this->id = o.id) && (this->number = o.number));
-}
+
+    bool operator==(const Order & o) const;
+
+    struct HashFunction
+    {
+        size_t operator() (const  Order & o) const
+        {
+            size_t hash_id     = std::hash<int>         ()(o.id);
+            size_t hash_number = std::hash<unsigned int>()(o.number) << 1;
+
+            return hash_id ^ hash_number;
+        }
+    };
 
 };
 

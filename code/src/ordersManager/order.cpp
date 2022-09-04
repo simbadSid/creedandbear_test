@@ -2,22 +2,16 @@
 // Created by Riyane on 03/09/2022.
 //
 
+
 #include "order.h"
-
-Order::Order()
-{
-
-}
 
 Order::Order(int id, unsigned int number)
 {
     this->id = id;
     this->number = number;
 }
-/*
-Order::Order(Order const &o)
+
+bool Order::operator==(const Order & o) const
 {
-    this->id = o.id;
-    this->number = o.number;
+    return ((this->id == o.id) && (this->number == o.number));
 }
-*/

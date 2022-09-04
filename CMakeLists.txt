@@ -18,14 +18,17 @@ cmake_minimum_required(VERSION 3.23)
 ###############################################
 ## Definitions
 ###############################################
+set(                        DESCRIPTION                         "Creed & Bear assessment")
 project(					test								VERSION 1.1
-                            DESCRIPTION							"Very nice shawarma project"
+                            DESCRIPTION							${DESCRIPTION}
                             LANGUAGES							CXX)
 set(						CMAKE_CXX_STANDARD					17)
+set(						CMAKE_CXX							g++)
+set(						CMAKE_CXX_STANDARD_REQUIRED			ON)
+set(						CMAKE_CXX_EXTENSIONS				OFF)
 
 enable_testing()
 
-set(						DESCRIPTION							"Very nice shawarma project")
 set(						DIR_SRC                             src)
 set(						DIR_HEADER                          header)
 
@@ -44,14 +47,6 @@ set(						EXEC_LIST        					main_ordersManager)
 #set(						SRC_TEST_MAIN						test_main${EXTENSION_SRC})
 
 
-######################
-#TODO change all these flags with non compiler-dependant
-######################
-set(						CMAKE_CXX							g++)
-set(						CMAKE_CXX_STANDARD					11)
-set(						CMAKE_CXX_STANDARD_REQUIRED			ON)
-set(						CMAKE_CXX_EXTENSIONS				OFF)
-
 set(						CMAKE_CXX_FLAGS						"-O3 -Wall -Werror -Wextra -g")
 SET(                        FLAG_PROD                           "")
 SET(                        FLAG_VERBOSE                        "-DLOG")
@@ -65,7 +60,9 @@ SET(                        FLAG_TEST                           "-DTEST")
 message(STATUS "==================================")
 message(STATUS "Configurations : " ${DESCRIPTION})
 message(STATUS "==================================")
-message(STATUS "Debug          : " ${XXXXXX})
+message(STATUS "C++ standard          : " ${CMAKE_CXX_STANDARD})
+message(STATUS "C++ compiler          : " ${CMAKE_CXX})
+message(STATUS "Flags                 : " ${CMAKE_CXX_FLAGS})
 
 
 #=======================================================

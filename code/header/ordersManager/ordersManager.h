@@ -11,6 +11,7 @@
 #include <thread>
 #include <random>
 #include <list>
+#include <unordered_set>
 
 #include "order.h"
 
@@ -56,12 +57,11 @@ protected:
     virtual void waitAndCleanOrderManager();
 
 
-//#define TEST
 #ifdef TEST
 private:
     std::mutex mtx; // Mutex used to store orders for unit tests
-    std::vector<Order> ordersinDB;
-    unsigned int ordersinDBIndex;
+    std::vector<Order> ordersInDB;
+    unsigned int ordersInDBIndex;
 
 public:
     bool isCorrectOrdersProcessing();

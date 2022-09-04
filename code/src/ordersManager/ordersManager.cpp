@@ -25,8 +25,8 @@ void OrdersManager::generate_fake_orders(unsigned int quantity)
     this->last_printed_log = std::chrono::system_clock::now();
     this->quantity = quantity;
     #ifdef TEST
-    this->ordersinDB = std::vector<Order>(quantity);
-    this->ordersinDBIndex = 0;
+    this->ordersInDB = std::vector<Order>(quantity);
+    this->ordersInDBIndex = 0;
     #endif
 
     for (unsigned int i=0; i<this->quantity; ++i)
@@ -59,8 +59,8 @@ void OrdersManager::fake_save_on_db(Order order)
     #ifdef TEST
     {
         std::unique_lock<std::mutex> lockGuard(this->mtx);
-        this->ordersinDB[this->ordersinDBIndex] = order;
-        ++ this->ordersinDBIndex;
+        this->ordersInDB[this->ordersInDBIndex] = order;
+        ++ this->ordersInDBIndex;
     }
     #endif
 
@@ -83,8 +83,8 @@ void OrdersManager::fake_save_on_db(const Order orderList[], unsigned int size)
         for(unsigned int i=0; i<size; i++)
         {
             log("Order [%d] %u was successfully prosecuted.\n", orderList[i].id, orderList[i].number);
-            this->ordersinDB[this->ordersinDBIndex] = orderList[i];
-            ++ this->ordersinDBIndex;
+            this->ordersInDB[this->ordersInDBIndex] = orderList[i];
+            ++ this->ordersInDBIndex;
         }
     }
     #endif
@@ -143,13 +143,13 @@ void OrdersManager::waitAndCleanOrderManager()
 #ifdef TEST
 bool OrdersManager::isCorrectOrdersProcessing()
 {
-    if (this->ordersinDBIndex != this->quantity)
+    if (this->ordersInDBIndex != this->quantity)
         return false;
 
-    std::list<Order> allOrders = std::list<Order>(this->orders.begin(), this->orders.end());
-    for (Order order : this->ordersinDB)
+    std::unordered_set <Order, Order::HashFunction> allOrders(this->orders.begin(), this->orders.end());
+    for (Order order : this->ordersInDB)
     {
-        std::list<Order>::iterator it = std::find(allOrders.begin(), allOrders.end(), order);
+        std::unordered_set<Order>::iterator it = allOrders.find(order);
         if (it == allOrders.end())
             return false;
         allOrders.erase(it);
