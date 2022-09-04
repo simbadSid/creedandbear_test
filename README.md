@@ -6,18 +6,18 @@ In this project, we have designed and implemented 5 different algorithms to opti
 In the __Conclusion__ section, we present and explain our choice of algorithm for solving the considered problem.
 
 The proposed algorithms (sorted from the less to the most complex/efficients) are:
-* [0_Base](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_0_base.cpp): the base algorithm proposed in the assignment.
-* [1_bufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_1_bufferedDb.cpp): in this algorithm the database is not accessed at each iteration.
+* [0_Base](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager/ordersManager_0_base.cpp): the base algorithm proposed in the assignment.
+* [1_bufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager/ordersManager_1_bufferedDb.cpp): in this algorithm the database is not accessed at each iteration.
 Instead, the orders are stored within a local buffer and the database is only requested once the buffer is full.
-* [2_sharedList](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_2_sharedList.cpp): this algorithm follows the model of the "single producer and multiple consumers".
+* [2_sharedList](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager/ordersManager_2_sharedList.cpp): this algorithm follows the model of the "single producer and multiple consumers".
 A unique thread is responsible for processing of all the orders and storing them within a shared list.
 Different consumer threads are then responsible for parsing these orders and requesting the database. 
 Storing an order is then assynchrounous.
-* [3_sharedList_BufferedList](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_3_sharedList_BufferedList.cpp): this algorithm uses the same architecture as the SimpleSharedList.
+* [3_sharedList_BufferedList](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager/ordersManager_3_sharedList_BufferedList.cpp): this algorithm uses the same architecture as the SimpleSharedList.
 In addition, the producer thread reduces its latency by not accessing the shared list at each iteration (buffers the orders until the buffer is full).
 Hence, the will reduce the number of access to the critical section (locked section).
-* [4_sharedList_BufferedList_BufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_4_sharedList_BufferedList_BufferedDb.cpp): in addition to the previous algorithm, this algorithm buffers the accesses to the daa base.
-* [5_perThreadList_BufferedList_BufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager_5_perThreadList_BufferedList_BufferedDb.cpp): in addition to the previous algorithm, this version implements a shared list for each consumer thread.
+* [4_sharedList_BufferedList_BufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager/ordersManager_4_sharedList_BufferedList_BufferedDb.cpp): in addition to the previous algorithm, this algorithm buffers the accesses to the daa base.
+* [5_perThreadList_BufferedList_BufferedDb](https://github.com/simbadSid/creedandbear_test/blob/main/code/src/ordersManager/ordersManager_5_perThreadList_BufferedList_BufferedDb.cpp): in addition to the previous algorithm, this version implements a shared list for each consumer thread.
 By storing the data within the thread that consumes them, this final optimization minimize drastically the number of accesses to the critical section.
 The architecture of this algorithm is presented in the following graph.
 ![alt text](https://github.com/simbadSid/creedandbear_test/blob/main/resource/algorithm_5_architecture.drawio.png)
@@ -71,7 +71,6 @@ In the case of a small number of orders, we would rather choose __1_bufferedDb__
 
 ## Build and test
 This project uses the CMake framework.
-
 In order to build the project, we need to run the following command
 ```
 mkdir bin
@@ -80,7 +79,17 @@ cmake ../
 make;
 ```
 
-Building the project results in generating the following executable file:
+Building the project results in generating the following executable files:
 * __bin/main_ordersManager__: benchmarks the different implemented algorithm using different quantity of orders.
-This executable only prints the execution time.
-* __bin/main_ordersManager_verbose__: 
+This executable only prints the execution time of each algorithm with a set of quantity sizes.
+* __bin/main_ordersManager_verbose__: log the execution of each algorithm (same as in the topic of the assignment).
+
+In order to test the functional correctness of our algorithms, we have implemented a set of unit test ([link](https://github.com/simbadSid/creedandbear_test/tree/main/test)).
+These tests may be run using:
+```
+cd bin
+cmake ../
+make;
+ctes
+```
+The test framework that we used (CTest) is integrated within the CMake framework and requires no external installation.
