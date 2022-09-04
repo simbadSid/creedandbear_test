@@ -12,7 +12,7 @@ int main()
 
     bool res = simulateForEachSize(om, "OrdersManager_2_sharedList");
 
-	if (res)
+    if (res)
         return 0;
     else
         return -1;

@@ -19,37 +19,31 @@ cmake_minimum_required(VERSION 3.23)
 ## Definitions
 ###############################################
 set(                        DESCRIPTION                         "Creed & Bear assessment")
-project(					test								VERSION 1.1
-                            DESCRIPTION							${DESCRIPTION}
-                            LANGUAGES							CXX)
-set(						CMAKE_CXX_STANDARD					17)
-set(						CMAKE_CXX							g++)
-set(						CMAKE_CXX_STANDARD_REQUIRED			ON)
-set(						CMAKE_CXX_EXTENSIONS				OFF)
+project(                    test                                VERSION 1.1
+                            DESCRIPTION                         ${DESCRIPTION}
+                            LANGUAGES                           CXX)
+set(                        CMAKE_CXX_STANDARD                  17)
+set(                        CMAKE_CXX                           g++)
+set(                        CMAKE_CXX_STANDARD_REQUIRED         ON)
+set(                        CMAKE_CXX_EXTENSIONS                OFF)
 
-enable_testing()
+set(                        DIR_SRC                             src)
+set(                        DIR_APP                             app)
+set(                        DIR_HEADER                          header)
+set(                        DIR_TEST                            test)
 
-set(						DIR_SRC                             src)
-set(						DIR_APP                             app)
-set(						DIR_HEADER                          header)
-set(						DIR_TEST                            test)
+set(                        EXTENSION_SRC                       .cpp)
+set(                        EXTENSION_HEADER                    .h)
 
-set(						EXTENSION_SRC						.cpp)
-set(						EXTENSION_HEADER					.h)
+set(                        DIR_APP                             ${CMAKE_SOURCE_DIR}/app)
+set(                        DIR_TEST                            ${CMAKE_SOURCE_DIR}/test)
+set(                        DIR_CODE                            ${CMAKE_SOURCE_DIR}/code)
+set(                        DIR_RESOURCE                        ${CMAKE_SOURCE_DIR}/resource)
 
-set(						DIR_APP								${CMAKE_SOURCE_DIR}/app)
-set(						DIR_TEST							${CMAKE_SOURCE_DIR}/test)
-set(						DIR_CODE							${CMAKE_SOURCE_DIR}/code)
-set(						DIR_RESOURCE						${CMAKE_SOURCE_DIR}/resource)
+set(                        EXEC_LIST                           main_ordersManager)
+set(                        SRC_TEST_MAIN                       test_main${EXTENSION_SRC})
 
-set(						EXEC_LIST        					main_ordersManager)
-set(						SRC_TEST_MAIN						test_main${EXTENSION_SRC})
-
-#set(						LIB_LIST_TEST_UNIT_TEST				${LIB_TOOLS_CC} ${LIB_CUSTOM_ALLOCATOR} ${LIB_HTTP_SERVER} ${LIB_JOURNAL} ${LIB_HTTP_SERVER_CORE})
-
-
-
-set(						CMAKE_CXX_FLAGS						"-O3 -Wall -Werror -Wextra -g")
+set(                        CMAKE_CXX_FLAGS                     "-O3 -Wall -Werror -Wextra -g")
 SET(                        FLAG_PROD                           "")
 SET(                        FLAG_VERBOSE                        "-DLOG")
 SET(                        FLAG_TEST                           "-DTEST")
@@ -98,14 +92,6 @@ foreach(sourceFile ${libFileList})
     message(STATUS "\t\t${sourceFile}")
     LIST(APPEND libCustomList ${sourceFile})
 endforeach(sourceFile ${libFileList})
-
-#message(STATUS "\n\nCompile the application(s):")
-#file(GLOB_RECURSE appFileList ${DIR_APP}/*${EXTENSION_SRC})                 # Gather the source files of the application
-#foreach(sourceFile ${appFileList})
-#    message(STATUS "\t\t${sourceFile}")
-#    LIST(APPEND libCustomList ${sourceFile})
-#endforeach(sourceFile ${appFileList})
-
 
 message(STATUS "\n\nCompile tests:")
 file(GLOB_RECURSE testFileList ${DIR_TEST}/*${EXTENSION_SRC})               # Gather the test source files
